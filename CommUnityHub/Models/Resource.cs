@@ -9,6 +9,9 @@ namespace CommUnityHub.Models
 
     public class Resource
     {
+        [Key]
+        public int Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -37,7 +40,7 @@ namespace CommUnityHub.Models
         public string Category { get; set; }
 
         [Url]
-        public string Webiste { get; set; }
+        public string Website { get; set; }
 
     }
 }

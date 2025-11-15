@@ -1,4 +1,4 @@
-﻿namespace CommUnityHub.Models
+﻿namespace CommUnityHub.Services
 
 //class developed by Harsheta Sharma
 /* Resource Manager:Resource manager class will be responsible for managing the list of resources from the SQL server database.
@@ -7,7 +7,7 @@
  * the resource on google maps api. Resource will be presented through the controller
  */
 {
-    public class ResourceManager
+    public class ResourceManager 
     {
     }
 }
