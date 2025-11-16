@@ -27,11 +27,11 @@ namespace CommUnityHub.Models
         public string Email { get; set; }
 
         [Required]
-        public string Address { get; set; }
+        public string Address { get; set; } //geocoding from original CSV file
 
 
         [Required]
-        public string City { get; set; }
+        public string Region { get; set; }
 
         [Required]
         public string HoursOfOperation { get; set; }
