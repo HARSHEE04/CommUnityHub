@@ -1,0 +1,33 @@
+﻿@model IEnumerable<CommUnityHub.Models.Offer>
+
+@{
+    ViewData["Title"] = "Offer Listing";
+}
+
+<h1>Offer Listing</h1>
+
+<p>
+    <a asp-controller="Offer" asp-action="Create">Create New Offer</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Category</th>
+            <th>Location</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var offer in Model)
+        {
+            <tr>
+                <td>@offer.Title</td>
+                <td>@offer.Category</td>
+                <td>@offer.Location</td>
+                <td>@offer.Status</td>
+            </tr>
+        }
+    </tbody>
+</table>
