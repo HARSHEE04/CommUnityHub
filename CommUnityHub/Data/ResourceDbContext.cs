@@ -19,5 +19,6 @@ namespace CommUnityHub.Data
         }
 
         public DbSet<Resource> Resources { get; set; }
+        public DbSet<Offer> Offers { get; set; }
     }
 }
