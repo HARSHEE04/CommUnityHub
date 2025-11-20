@@ -21,6 +21,10 @@ namespace CommUnityHub
             // Register CSV importer
             builder.Services.AddScoped<CSVImporter>();
 
+
+            //Register ResourceManager service
+            builder.Services.AddScoped<ResourceManager>();
+
             var app = builder.Build();
 
            
