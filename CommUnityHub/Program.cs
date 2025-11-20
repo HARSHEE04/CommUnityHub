@@ -1,6 +1,7 @@
 using CommUnityHub.Data;
 using CommUnityHub.Models;
 using CommUnityHub.Services;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace CommUnityHub
@@ -20,6 +21,13 @@ namespace CommUnityHub
 
             // Register CSV importer
             builder.Services.AddScoped<CSVImporter>();
+
+            builder.Services.AddDbContext<UserIdentityDbContext>(options =>
+            options.UseSqlServer(builder.Configuration.GetConnectionString("CommunityHubIdentityDB")));
+
+            builder.Services.AddIdentity<User, IdentityRole>()
+                .AddEntityFrameworkStores<UserIdentityDbContext>()
+                .AddDefaultTokenProviders();
 
 
             //Register ResourceManager service
@@ -51,7 +59,8 @@ namespace CommUnityHub
         
             app.UseStaticFiles();
             app.UseRouting();
-
+            app.UseAuthorization();
+            app.UseAuthentication();
             app.MapControllerRoute(
                 name: "Default",
                 pattern: "{controller=Home}/{action=Index}/{id?}"
