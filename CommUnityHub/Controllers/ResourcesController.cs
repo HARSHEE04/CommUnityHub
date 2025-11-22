@@ -105,6 +105,54 @@ namespace CommUnityHub.Controllers
             return View(resources);
         }
 
+        //add a new controller for load more options to ensure webpage doesnt crash
+        [HttpGet]
+        public async Task<IActionResult> LoadMore(string keyword, string region, bool? ascending, int page = 1)
+        {
+            int pageSize = 20;
+
+            // Start with full set depending on user's previous actions
+            List<Resource> results;
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                results = await resourceManager.SearchByKeywords(keyword);
+
+                if (!string.IsNullOrWhiteSpace(region))
+                {
+                    results = results
+                        .Where(r => r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
+                        .ToList();
+                }
+            }
+            else if (!string.IsNullOrWhiteSpace(region))
+            {
+                results = await resourceManager.FilterByRegion(region);
+            }
+            else
+            {
+                results = await resourceManager.GetAllResourcesAsync();
+            }
+
+            // Sorting
+            if (ascending.HasValue)
+            {
+                results = ascending.Value
+                    ? results.OrderBy(r => r.Name).ToList()
+                    : results.OrderByDescending(r => r.Name).ToList();
+            }
+
+            // Pagination: Pick next 20 results
+            var pageResults = results
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            // Return partial HTML ONLY for these 20 cards
+            return PartialView("_ResourceCardsPartial", pageResults);
+        }
+
+
 
 
     }
