@@ -89,4 +89,57 @@ else
         }
 
     </div>
+
+
+    @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+    {
+        <nav>
+            <ul class="pagination justify-content-center mt-4">
+
+                @{
+                    string keyword = ViewBag.SearchTerm;
+                    string region = ViewBag.SelectedRegion;
+                    bool? sortAscending = ViewBag.SortAscending;
+                }
+
+        <!-- Helper function for URL creation -->
+        @functions {
+            public string CreateUrl(int page, string keyword, string region, bool? asc)
+            {
+                var url = "/Resources/";
+
+                if (!string.IsNullOrWhiteSpace(keyword))
+                    url += $"Search?keyword={keyword}&pageNumber={page}";
+                else if (!string.IsNullOrWhiteSpace(region))
+                    url += $"FilterByRegion?region={region}&pageNumber={page}";
+                else if (asc != null)
+                    url += $"SortResources?ascending={asc}&pageNumber={page}";
+                else
+                    url += $"loadDashboard?pageNumber={page}";
+
+                return url;
+            }
+        }
+
+        <!-- Previous -->
+        <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
+            <a class="page-link" href="@CreateUrl(ViewBag.PageNumber - 1, keyword, region, sortAscending)">Previous</a>
+        </li>
+
+        <!-- Page numbers -->
+        @for (int i = 1; i <= ViewBag.TotalPages; i++)
+        {
+            <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
+                <a class="page-link" href="@CreateUrl(i, keyword, region, sortAscending)">@i</a>
+            </li>
+        }
+
+        <!-- Next -->
+        <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
+            <a class="page-link" href="@CreateUrl(ViewBag.PageNumber + 1, keyword, region, sortAscending)">Next</a>
+        </li>
+
+    </ul>
+</nav>
+}
 }
