@@ -1,0 +1,92 @@
+﻿@model List<CommUnityHub.Models.Resource>
+
+@{
+    ViewData["Title"] = "Resources";
+}
+
+<h1 class="mb-4">Community Resources</h1>
+
+
+<div class="row mb-4">
+
+    <!-- Search bar -->
+    <div class="col-md-4">
+        <form method="get" action="/Resources/Search">
+            <div class="input-group">
+                <input type="text"
+                       name="keyword"
+                       class="form-control"
+                       placeholder="Search resources..."
+                       value="@ViewBag.SearchTerm" />
+
+                <button class="btn btn-primary" type="submit">Search</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Region filter -->
+    <div class="col-md-4">
+        <form method="get" action="/Resources/FilterByRegion">
+            <div class="input-group">
+                <select name="region" class="form-select">
+                    <option value="">Filter by Region</option>
+                    <option value="Peel">Peel</option>
+                    <option value="Halton">Halton</option>
+                    <option value="Toronto">Toronto</option>
+                    <option value="York">York</option>
+                    <option value="Durham">Durham</option>
+                </select>
+
+                <button class="btn btn-secondary" type="submit">Filter</button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Sorting -->
+    <div class="col-md-4 text-end">
+        <a class="btn btn-outline-dark me-2"
+            href="@Url.Action("SortResources", "Resources", new { ascending = true })">Sort A–Z</a>
+
+        <a class="btn btn-outline-dark"
+           href="@Url.Action("SortResources", "Resources", new { ascending = false })">Sort Z–A</a>
+
+    </div>
+</div>
+
+
+@if (Model == null || !Model.Any())
+{
+    <div class="alert alert-info mt-4">
+        No resources to display. Please search for a resource using the search bar above.
+    </div>
+}
+else
+{
+    <div class="row">
+
+        @foreach (var r in Model)
+        {
+            <div class="col-md-4 mb-4">
+                <div class="card shadow-sm" style="border-radius: 12px;">
+                    <div class="card-body">
+
+                        <h4 class="card-title">@r.Name</h4>
+
+                        <p class="card-text">
+                            <strong>Category:</strong> @r.Category <br />
+                            <strong>Region:</strong> @r.Region <br />
+                        </p>
+
+                        <!-- Details about specific resource -->
+                        <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })"
+                           class="btn btn-primary w-100">
+                            View Details
+                        </a>
+
+                    </div>
+                </div>
+            </div>
+        }
+
+    </div>
+}

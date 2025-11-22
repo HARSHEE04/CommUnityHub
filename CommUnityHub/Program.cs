@@ -63,7 +63,7 @@ namespace CommUnityHub
             app.UseAuthentication();
             app.MapControllerRoute(
                 name: "Default",
-                pattern: "{controller=Home}/{action=Index}/{id?}"
+                pattern: "{controller=Resources}/{action=loadDashboard}/{id?}"
             );
 
             app.Run();

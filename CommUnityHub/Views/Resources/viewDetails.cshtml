@@ -1,0 +1,59 @@
+﻿@model CommUnityHub.Models.Resource
+
+@{
+    ViewData["Title"] = "Resource Details";
+}
+
+<h2 class="mb-4">Resource Details</h2>
+
+<div class="card shadow-sm" style="border-radius: 12px;">
+    <div class="card-body">
+
+        <!-- Resource name -->
+        <h3 class="card-title mb-3">@Model.Name</h3>
+
+        <!-- Resource info -->
+        <p class="card-text">
+            <strong>Category:</strong> @Model.Category <br />
+            <strong>Region:</strong> @Model.Region <br />
+            <strong>Address:</strong> @Model.Address <br />
+        </p>
+
+        
+        @if (!string.IsNullOrWhiteSpace(Model.Description))
+        {
+            <p class="mt-3">
+                <strong>Description:</strong><br />
+                @Model.Description
+            </p>
+        }
+
+        <!-- Google maps api -->
+        <hr />
+        <h4 class="mt-3 mb-3">Location on Map</h4>
+
+        @if (ViewBag.MapUrl != null)
+        {
+            <iframe width="100%"
+                    height="350"
+                    style="border:0; border-radius: 12px;"
+                    loading="lazy"
+                    allowfullscreen
+                    referrerpolicy="no-referrer-when-downgrade"
+                    src="@ViewBag.MapUrl">
+            </iframe>
+        }
+        else
+        {
+            <div class="alert alert-warning mt-3">
+                Map could not be loaded for this resource.
+            </div>
+        }
+
+        <!-- Back button to view all resources again -->
+        <a href="/Resource/Index" class="btn btn-secondary mt-4">
+            ← Back to Resources
+        </a>
+
+    </div>
+</div>
