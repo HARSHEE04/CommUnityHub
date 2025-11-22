@@ -41,6 +41,7 @@ namespace CommUnityHub.Controllers
         {
             TempData["LastSearch"] = keyword;
             var resources = await resourceManager.SearchByKeywords(keyword);
+            resources = resources.Take(20).ToList(); //only show first 20 results initially
             ViewBag.SearchTerm = keyword;
             return View("loadDashboard", resources);
         }
@@ -49,7 +50,8 @@ namespace CommUnityHub.Controllers
         public async Task<IActionResult> FilterByRegion(string region)
         {
             // Retrieve last used search keyword
-            var keyword = TempData["LastSearch"]?.ToString();
+            var keyword = TempData["LastSearch"]?.ToString()
+                 ?? Request.Query["keyword"].ToString();
 
             List<Resource> resources;
 
@@ -62,6 +64,7 @@ namespace CommUnityHub.Controllers
                 resources = searchedResults
                     .Where(r => !string.IsNullOrWhiteSpace(r.Region) &&
                                 r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
+                    .Take(20)
                     .ToList();
             }
             else
@@ -70,6 +73,7 @@ namespace CommUnityHub.Controllers
                
                 resources = (await resourceManager.FilterByRegion(region))
                     .Where(r => r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
+                    .Take(20)
                     .ToList();
             }
 
@@ -84,12 +88,59 @@ namespace CommUnityHub.Controllers
 
 
         //sort A-Z or Z-A
-        public async Task<IActionResult> SortResources (bool ascending) 
+        public async Task<IActionResult> SortResources(bool ascending, string keyword, string region)
         {
-            var resources = await resourceManager.SortResourcesAZ(ascending);
-            ViewBag.SortAscending = ascending; 
-            return View("loadDashboard", resources);
+            // use last search 
+            keyword = keyword
+                   ?? TempData["LastSearch"]?.ToString();
+
+            //use last region filter to ensure those two are maintained
+            region = region
+                  ?? TempData["LastRegion"]?.ToString();
+
+            // Users must search before sorting
+            if (string.IsNullOrWhiteSpace(keyword))
+            {
+                TempData["Error"] = "Please search before sorting.";
+                return RedirectToAction("loadDashboard");
+            }
+
+            //Start with the search results
+            var results = await resourceManager.SearchByKeywords(keyword);
+
+            // ensure to take region filter results into account
+            if (!string.IsNullOrWhiteSpace(region))
+            {
+                results = results
+                    .Where(r =>
+                        !string.IsNullOrWhiteSpace(r.Region) &&
+                        r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            
+            var sortedAll = await resourceManager.SortResourcesAZ(ascending);
+
+            //display proper sorted results
+            results = sortedAll
+                .Where(sorted => results.Any(r => r.Id == sorted.Id))
+                .Take(20)  // first 20 only
+                .ToList();
+
+            // keep keywords
+            TempData["LastSearch"] = keyword;
+            TempData["LastRegion"] = region;
+
+            // use those values in view
+            ViewBag.SearchTerm = keyword;
+            ViewBag.SelectedRegion = region;
+            ViewBag.SortAscending = ascending;
+
+            return View("loadDashboard", results);
         }
+
+
+
 
         //view resource details page with google maps api
         public async Task<IActionResult> viewDetails(int id) 
@@ -105,52 +156,7 @@ namespace CommUnityHub.Controllers
             return View(resources);
         }
 
-        //add a new controller for load more options to ensure webpage doesnt crash
-        [HttpGet]
-        public async Task<IActionResult> LoadMore(string keyword, string region, bool? ascending, int page = 1)
-        {
-            int pageSize = 20;
-
-            // Start with full set depending on user's previous actions
-            List<Resource> results;
-
-            if (!string.IsNullOrWhiteSpace(keyword))
-            {
-                results = await resourceManager.SearchByKeywords(keyword);
-
-                if (!string.IsNullOrWhiteSpace(region))
-                {
-                    results = results
-                        .Where(r => r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
-                        .ToList();
-                }
-            }
-            else if (!string.IsNullOrWhiteSpace(region))
-            {
-                results = await resourceManager.FilterByRegion(region);
-            }
-            else
-            {
-                results = await resourceManager.GetAllResourcesAsync();
-            }
-
-            // Sorting
-            if (ascending.HasValue)
-            {
-                results = ascending.Value
-                    ? results.OrderBy(r => r.Name).ToList()
-                    : results.OrderByDescending(r => r.Name).ToList();
-            }
-
-            // Pagination: Pick next 20 results
-            var pageResults = results
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
-                .ToList();
-
-            // Return partial HTML ONLY for these 20 cards
-            return PartialView("_ResourceCardsPartial", pageResults);
-        }
+        
 
 
 
