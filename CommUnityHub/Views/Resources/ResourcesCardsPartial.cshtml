@@ -1,0 +1,24 @@
+﻿@model List<CommUnityHub.Models.Resource>
+
+@foreach (var r in Model)
+{
+    <div class="col-md-4 mb-4">
+        <div class="card shadow-sm" style="border-radius: 12px;">
+            <div class="card-body">
+
+                <h4 class="card-title">@r.Name</h4>
+
+                <p class="card-text">
+                    <strong>Category:</strong> @r.Category <br />
+                    <strong>Region:</strong> @r.Region <br />
+                </p>
+
+                <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })"
+                   class="btn btn-primary w-100">
+                    View Details
+                </a>
+
+            </div>
+        </div>
+    </div>
+}

@@ -2,10 +2,16 @@
 
 @{
     ViewData["Title"] = "Resources";
+
+    string keyword = ViewBag.SearchTerm;
+    string region = ViewBag.SelectedRegion;
+    bool? sortAscending = ViewBag.SortAscending;
+
+    int pageNumber = ViewBag.PageNumber ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
 <h1 class="mb-4">Community Resources</h1>
-
 
 <div class="row mb-4">
 
@@ -45,14 +51,12 @@
     <!-- Sorting -->
     <div class="col-md-4 text-end">
         <a class="btn btn-outline-dark me-2"
-            href="@Url.Action("SortResources", "Resources", new { ascending = true })">Sort A–Z</a>
+           href="@Url.Action("SortResources", "Resources", new { ascending = true })">Sort A–Z</a>
 
         <a class="btn btn-outline-dark"
            href="@Url.Action("SortResources", "Resources", new { ascending = false })">Sort Z–A</a>
-
     </div>
 </div>
-
 
 @if (Model == null || !Model.Any())
 {
@@ -62,8 +66,7 @@
 }
 else
 {
-    <div class="row">
-
+    <div id="resource-list" class="row">
         @foreach (var r in Model)
         {
             <div class="col-md-4 mb-4">
@@ -87,59 +90,69 @@ else
                 </div>
             </div>
         }
-
     </div>
 
-
-    @if (ViewBag.TotalPages != null && ViewBag.TotalPages > 1)
+    <!--Load more button-->
+    @if (pageNumber < totalPages)
     {
-        <nav>
-            <ul class="pagination justify-content-center mt-4">
+        <div class="text-center mt-4">
+            <button id="loadMoreBtn" class="btn btn-success px-4 py-2"
+                    data-page="@pageNumber"
+                    data-total="@totalPages"
+                    data-keyword="@keyword"
+                    data-region="@region"
+                    data-sort="@sortAscending">
+                Load More
+            </button>
+        </div>
+    }
+}
 
-                @{
-                    string keyword = ViewBag.SearchTerm;
-                    string region = ViewBag.SelectedRegion;
-                    bool? sortAscending = ViewBag.SortAscending;
+<!-- Load more script using AJAx-->
+<script>
+    document.getElementById("loadMoreBtn")?.addEventListener("click", function () {
+
+        const btn = this;
+        const nextPage = parseInt(btn.dataset.page) + 1;
+        const totalPages = parseInt(btn.dataset.total);
+
+        const keyword = btn.dataset.keyword;
+        const region = btn.dataset.region;
+        const sort = btn.dataset.sort;
+
+        let url = "/Resources/";
+
+        if (keyword && keyword.trim() !== "") {
+            url += `Search?keyword=${keyword}&pageNumber=${nextPage}`;
+        }
+        else if (region && region.trim() !== "") {
+            url += `FilterByRegion?region=${region}&pageNumber=${nextPage}`;
+        }
+        else if (sort !== "" && sort !== "null") {
+            url += `SortResources?ascending=${sort}&pageNumber=${nextPage}`;
+        }
+        else {
+            url += `loadDashboard?pageNumber=${nextPage}`;
+        }
+
+        fetch(url)
+            .then(response => response.text())
+            .then(html => {
+                // Extract new resource cards from returned HTML
+                const tempDiv = document.createElement("div");
+                tempDiv.innerHTML = html;
+
+                const newCards = tempDiv.querySelectorAll("#resource-list .col-md-4");
+
+                newCards.forEach(card => {
+                    document.querySelector("#resource-list").appendChild(card);
+                });
+
+                btn.dataset.page = nextPage;
+
+                if (nextPage >= totalPages) {
+                    btn.remove();
                 }
-
-        <!-- Helper function for URL creation -->
-        @functions {
-            public string CreateUrl(int page, string keyword, string region, bool? asc)
-            {
-                var url = "/Resources/";
-
-                if (!string.IsNullOrWhiteSpace(keyword))
-                    url += $"Search?keyword={keyword}&pageNumber={page}";
-                else if (!string.IsNullOrWhiteSpace(region))
-                    url += $"FilterByRegion?region={region}&pageNumber={page}";
-                else if (asc != null)
-                    url += $"SortResources?ascending={asc}&pageNumber={page}";
-                else
-                    url += $"loadDashboard?pageNumber={page}";
-
-                return url;
-            }
-        }
-
-        <!-- Previous -->
-        <li class="page-item @(ViewBag.PageNumber == 1 ? "disabled" : "")">
-            <a class="page-link" href="@CreateUrl(ViewBag.PageNumber - 1, keyword, region, sortAscending)">Previous</a>
-        </li>
-
-        <!-- Page numbers -->
-        @for (int i = 1; i <= ViewBag.TotalPages; i++)
-        {
-            <li class="page-item @(i == ViewBag.PageNumber ? "active" : "")">
-                <a class="page-link" href="@CreateUrl(i, keyword, region, sortAscending)">@i</a>
-            </li>
-        }
-
-        <!-- Next -->
-        <li class="page-item @(ViewBag.PageNumber == ViewBag.TotalPages ? "disabled" : "")">
-            <a class="page-link" href="@CreateUrl(ViewBag.PageNumber + 1, keyword, region, sortAscending)">Next</a>
-        </li>
-
-    </ul>
-</nav>
-}
-}
+            });
+    });
+</script>

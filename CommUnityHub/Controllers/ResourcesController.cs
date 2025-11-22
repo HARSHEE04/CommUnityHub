@@ -49,7 +49,7 @@ namespace CommUnityHub.Controllers
         public async Task<IActionResult> FilterByRegion(string region)
         {
             // Retrieve last used search keyword
-            var keyword = TempData["LastKeyword"]?.ToString();
+            var keyword = TempData["LastSearch"]?.ToString();
 
             List<Resource> resources;
 
@@ -74,7 +74,7 @@ namespace CommUnityHub.Controllers
             }
 
             // Keep keyword alive for next operation
-            TempData["LastKeyword"] = keyword;
+            TempData["LastSearch"] = keyword;
 
             ViewBag.SelectedRegion = region;
 

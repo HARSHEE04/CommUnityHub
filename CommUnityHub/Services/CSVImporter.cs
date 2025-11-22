@@ -45,11 +45,13 @@ namespace CommUnityHub.Services
                 // REGISTER THE CLASS MAP (MOST IMPORTANT STEP)
                 csv.Context.RegisterClassMap<ResourceCSVMap>();  //register the mapper class to ensure proper mapping between ResourceCSVModel and CSV columns
 
-                var csvRecords = csv.GetRecords<ResourceCSVModel>().ToList(); //READS ALL RECORDS INTO A LIST
+                var csvRecords = csv.GetRecords<ResourceCSVModel>().ToList();
+                var limitedRecords = csvRecords.Take(300).ToList(); //only read first 500 records to avoid memory overload
+
 
                 Console.WriteLine($"Loaded {csvRecords.Count} rows from CSV.");
 
-                foreach (var record in csvRecords)
+                foreach (var record in limitedRecords)
                 {
                     
                   
