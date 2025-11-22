@@ -64,7 +64,7 @@ namespace CommUnityHub.Services
             }
 
             return await  _dbContext.Resources
-                .Where(r =>r.Region.ToLower() == region.ToLower())
+                .Where(r => r.Region.ToLower().Contains(region.ToLower()))
                 .ToListAsync();
         }
 

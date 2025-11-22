@@ -45,31 +45,39 @@ namespace CommUnityHub.Controllers
         //filter by region
         public async Task<IActionResult> FilterByRegion(string region)
         {
+            // Retrieve last used search keyword
             var keyword = TempData["LastKeyword"]?.ToString();
 
             List<Resource> resources;
 
             if (!string.IsNullOrWhiteSpace(keyword))
             {
-                // first search by keyword
-                var searched = await resourceManager.SearchByKeywords(keyword);
+                //  Search using keyword first
+                var searchedResults = await resourceManager.SearchByKeywords(keyword);
 
-                // then filter those results
-                resources = searched
-                    .Where(r => r.Region.Equals(region, StringComparison.OrdinalIgnoreCase))
+                // Filter ONLY those results by region (using Contains to match messy DB values)
+                resources = searchedResults
+                    .Where(r => !string.IsNullOrWhiteSpace(r.Region) &&
+                                r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
                     .ToList();
             }
             else
             {
-                // no keyword → filter whole DB
-                resources = await resourceManager.FilterByRegion(region);
+                // No search keyword used → filter whole DB
+               
+                resources = (await resourceManager.FilterByRegion(region))
+                    .Where(r => r.Region.Contains(region, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
             }
 
-            TempData["LastKeyword"] = keyword; // keep it alive
+            // Keep keyword alive for next operation
+            TempData["LastKeyword"] = keyword;
 
             ViewBag.SelectedRegion = region;
+
             return View("loadDashboard", resources);
         }
+
 
 
         //sort A-Z or Z-A
