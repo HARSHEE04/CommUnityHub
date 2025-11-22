@@ -36,18 +36,41 @@ namespace CommUnityHub.Controllers
         [HttpGet]
       public async Task<IActionResult> Search (string keyword) 
         {
+            TempData["LastSearch"] = keyword;
             var resources = await resourceManager.SearchByKeywords(keyword);
             ViewBag.SearchTerm = keyword;
             return View("loadDashboard", resources);
         }
 
         //filter by region
-        public async Task<IActionResult> FilterByRegion(string region) 
+        public async Task<IActionResult> FilterByRegion(string region)
         {
-            var resources = await resourceManager.FilterByRegion(region);
+            var keyword = TempData["LastKeyword"]?.ToString();
+
+            List<Resource> resources;
+
+            if (!string.IsNullOrWhiteSpace(keyword))
+            {
+                // first search by keyword
+                var searched = await resourceManager.SearchByKeywords(keyword);
+
+                // then filter those results
+                resources = searched
+                    .Where(r => r.Region.Equals(region, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+            else
+            {
+                // no keyword → filter whole DB
+                resources = await resourceManager.FilterByRegion(region);
+            }
+
+            TempData["LastKeyword"] = keyword; // keep it alive
+
             ViewBag.SelectedRegion = region;
             return View("loadDashboard", resources);
         }
+
 
         //sort A-Z or Z-A
         public async Task<IActionResult> SortResources (bool ascending) 
