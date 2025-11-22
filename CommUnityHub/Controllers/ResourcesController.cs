@@ -25,6 +25,9 @@ namespace CommUnityHub.Controllers
 
 
 
+        //introduce paigination to ensure only 20 resources are shown at a time and webpage doesnt crash 
+        //REFERENCE: https://www.geeksforgeeks.org/blogs/pagination-design-pattern/
+
         //show main dashbaord with no initial resources
         public async Task<IActionResult> loadDashboard() 
         {
