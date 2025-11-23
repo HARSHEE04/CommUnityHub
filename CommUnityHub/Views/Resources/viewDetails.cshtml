@@ -218,14 +218,14 @@
                 }
                 <hr />
                 <h4 class="mt-2 mb-3" style="color:#1f6c3f;"><i class="bi bi-geo-alt-fill me-1"></i> Location on Map</h4>
-                @if (ViewBag.MapUrl != null)
+                @if (ViewBag.MapsUrl != null)
                 {
                     <iframe width="100%"
                             height="350"
                             loading="lazy"
                             allowfullscreen
                             referrerpolicy="no-referrer-when-downgrade"
-                            src="@ViewBag.MapUrl">
+                            src="@ViewBag.MapsUrl">
                     </iframe>
                 }
                 else
