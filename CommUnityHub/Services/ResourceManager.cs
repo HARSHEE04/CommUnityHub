@@ -105,10 +105,10 @@ namespace CommUnityHub.Services
 
             if (match.Success)
             {
-                // FIRST number = LATITUDE
+                // First number = LATITUDE
                 string latitude = match.Groups[1].Value;
 
-                // SECOND number = LONGITUDE
+                // Second number = LONGITUDE
                 string longitude = match.Groups[2].Value;
 
                 return $"https://www.google.com/maps?q={latitude},{longitude}&z=15&output=embed";
