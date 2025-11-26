@@ -3,46 +3,67 @@
     ViewData["Title"] = "Register";
 }
 
-<div class="py-5 resource-header" style="border-bottom: 4px solid #e4c349;">
-    <div class="container text-center">
-        <h1 class="fw-bold mb-3 resource-title">Create Account</h1>
-        <p class="text-secondary mx-auto resource-desc">
-            Join the CommUnity Hub to connect with local services, programs, and community resources.
-        </p>
-    </div>
+<!-- Hero Header -->
+<div class="py-5 text-center"
+     style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+    <h1 class="fw-bold text-primary">Create an Account</h1>
+    <p class="text-dark mx-auto" style="max-width: 700px;">
+        Join the CommUnity Hub and access support tools for families, youth, and community well-being.
+    </p>
 </div>
 
-<div class="container mt-5">
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <form asp-action="Register" method="post">
-                <div class="mb-3">
-                    <label asp-for="FullName" class="form-label fw-bold">Full Name</label>
-                    <input asp-for="FullName" class="form-control sleek-input" />
-                    <span asp-validation-for="FullName" class="text-danger"></span>
+<!-- Registration Card -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-7">
+
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h3 class="text-center fw-bold text-primary mb-4">Register</h3>
+
+                    <form method="post">
+
+                        <div class="mb-3">
+                            <label>Full Name</label>
+                            <input asp-for="FullName" class="form-control rounded-3" placeholder="Enter your full name" />
+                            <span asp-validation-for="FullName" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control rounded-3" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input asp-for="Password" class="form-control rounded-3" placeholder="Create a password" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Confirm Password</label>
+                            <input asp-for="ConfirmPassword" class="form-control rounded-3" placeholder="Re-enter your password" type="password" />
+                            <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 rounded-3">
+                            Create Account
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <small>
+                                Already have an account?
+                                <a href="/Account/Login" class="text-primary fw-semibold">Login</a>
+                            </small>
+                        </div>
+
+                    </form>
+
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-bold">Email</label>
-                    <input asp-for="Email" class="form-control sleek-input" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-bold">Password</label>
-                    <input asp-for="Password" type="password" class="form-control sleek-input" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <div class="mb-3">
-                    <label asp-for="ConfirmPassword" class="form-label fw-bold">Confirm Password</label>
-                    <input asp-for="ConfirmPassword" type="password" class="form-control sleek-input" />
-                    <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn-core btn-green w-100 mt-3">
-                    <i class="bi bi-person-plus me-2"></i> Register
-                </button>
-            </form>
-            <p class="mt-3 text-center text-muted">
-                Already have an account? <a href="/Account/Login" class="text-success fw-bold">Login</a>
-            </p>
+            </div>
+
         </div>
     </div>
 </div>

@@ -3,36 +3,53 @@
     ViewData["Title"] = "Login";
 }
 
-<div class="py-5 resource-header" style="border-bottom: 4px solid #e4c349;">
-    <div class="container text-center">
-        <h1 class="fw-bold mb-3 resource-title">Welcome Back</h1>
-        <p class="text-secondary mx-auto resource-desc">
-            Login to access your dashboard and explore resources.
-        </p>
-    </div>
+<!-- Hero Header -->
+<div class="py-5 text-center"
+     style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+    <h1 class="fw-bold text-primary">Welcome Back</h1>
+    <p class="text-dark mx-auto" style="max-width: 700px;">
+        Sign in to access personalized resources and community tools.
+    </p>
 </div>
 
-<div class="container mt-5">
-    <div class="card shadow-sm border-0">
-        <div class="card-body p-4">
-            <form asp-action="Login" method="post">
-                <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-bold">Email</label>
-                    <input asp-for="Email" class="form-control sleek-input" />
-                    <span asp-validation-for="Email" class="text-danger"></span>
+<!-- Login Card -->
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+
+            <div class="card shadow-sm border-0 rounded-4">
+                <div class="card-body p-4">
+
+                    <h3 class="text-center fw-bold text-primary mb-4">Login</h3>
+
+                    <form method="post">
+                        <div class="mb-3">
+                            <label>Email</label>
+                            <input asp-for="Email" class="form-control rounded-3" placeholder="Enter your email" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label>Password</label>
+                            <input asp-for="Password" class="form-control rounded-3" placeholder="Enter your password" type="password" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+
+                        <button type="submit" class="btn btn-primary w-100 rounded-3">
+                            Login
+                        </button>
+
+                        <div class="text-center mt-3">
+                            <small>
+                                Don't have an account?
+                                <a href="/Account/Register" class="text-primary fw-semibold">Register</a>
+                            </small>
+                        </div>
+                    </form>
+
                 </div>
-                <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-bold">Password</label>
-                    <input asp-for="Password" type="password" class="form-control sleek-input" />
-                    <span asp-validation-for="Password" class="text-danger"></span>
-                </div>
-                <button type="submit" class="btn-core btn-green w-100 mt-3">
-                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
-                </button>
-            </form>
-            <p class="mt-3 text-center text-muted">
-                Don't have an account? <a href="/Account/Register" class="text-success fw-bold">Register</a>
-            </p>
+            </div>
+
         </div>
     </div>
 </div>

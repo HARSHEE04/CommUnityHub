@@ -7,7 +7,7 @@
     bool? sortAscending = ViewBag.SortAscending;
 }
 
-<!-- Header with gradient background -->
+<!-- Hero / Header -->
 <div class="py-5 text-center" style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
     <div class="container">
         <h1 class="fw-bold mb-3 text-primary">Resource Hub</h1>
@@ -21,7 +21,7 @@
 
 <!-- Search, Filter, Sort -->
 <div class="container mt-5">
-    <div class="card shadow-sm border-0">
+    <div class="card shadow-sm border-0 bg-white">
         <div class="card-body py-4">
             <div class="row g-4">
 
@@ -73,7 +73,7 @@
 @if (!string.IsNullOrEmpty(keyword) || !string.IsNullOrEmpty(region))
 {
     <div class="container mt-3">
-        <span class="text-muted fw-semibold me-2">Active filters:</span>
+        <span class="text-dark fw-semibold me-2">Active filters:</span>
         @if (!string.IsNullOrEmpty(keyword))
         {
             <span class="badge bg-primary me-2">
@@ -95,7 +95,7 @@
 <div class="container mt-5">
     @if (Model == null || !Model.Any())
     {
-        <div class="text-center p-5 bg-light rounded shadow-sm">
+        <div class="text-center p-5 bg-white rounded shadow-sm">
             <i class="bi bi-inbox display-4 mb-3 text-muted"></i>
             <h4 class="text-muted">No Resources Found</h4>
             <p class="text-secondary">Try adjusting your search or filter criteria.</p>
@@ -103,13 +103,13 @@
     }
     else
     {
-        <p class="text-muted"><i class="bi bi-list-ul me-1"></i> Showing <strong>@Model.Count()</strong> resource(s)</p>
+        <p class="text-dark"><i class="bi bi-list-ul me-1"></i> Showing <strong>@Model.Count()</strong> resource(s)</p>
 
         <div class="row g-4">
             @foreach (var r in Model)
             {
                 <div class="col-lg-4 col-md-6">
-                    <div class="card h-100 border-0 shadow-sm">
+                    <div class="card h-100 border-0 shadow-sm bg-white">
                         <div class="card-body d-flex flex-column">
                             <h4 class="fw-bold text-primary">@r.Name</h4>
                             <p class="text-dark mb-1"><strong>Category:</strong> @r.Category</p>
