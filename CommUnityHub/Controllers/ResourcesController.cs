@@ -1,12 +1,14 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using CommUnityHub.Models;
 using CommUnityHub.Services;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using System.Net.WebSockets;
-using CommUnityHub.Models;
 
 namespace CommUnityHub.Controllers
 {
 
     //the home controller is acutally the resources controller that shows the list of resources on the home page
+    [AllowAnonymous]
     public class ResourcesController : Controller
     {
 

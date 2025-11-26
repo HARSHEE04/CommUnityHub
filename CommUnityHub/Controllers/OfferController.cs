@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using CommUnityHub.Data;
 using CommUnityHub.Models;
+using Microsoft.AspNetCore.Authorization;
 
 namespace CommUnityHub.Controllers
 {
+    [Authorize]
     public class OfferController : Controller
     {
         private readonly ResourceDbContext _context;
@@ -18,6 +20,7 @@ namespace CommUnityHub.Controllers
 
         // PUBLIC LISTING: shows only Approved offers
         // GET: /Offer
+        [AllowAnonymous]
         public async Task<IActionResult> Index()
         {
             var offers = await _context.Offers
@@ -28,6 +31,7 @@ namespace CommUnityHub.Controllers
         }
 
         // GET: /Offer/Create
+        [Authorize(Roles = "Volunteer")]
         public IActionResult Create()
         {
             return View();
@@ -35,6 +39,7 @@ namespace CommUnityHub.Controllers
 
         // POST: /Offer/Create
         [HttpPost]
+        [Authorize(Roles = "Volunteer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Offer offer)
         {
@@ -50,6 +55,7 @@ namespace CommUnityHub.Controllers
         }
 
         // GET: /Offer/Edit/5
+        [Authorize(Roles = "Volunteer")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -68,6 +74,7 @@ namespace CommUnityHub.Controllers
 
         // POST: /Offer/Edit/5
         [HttpPost]
+        [Authorize(Roles = "Volunteer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Offer offer)
         {
@@ -102,6 +109,7 @@ namespace CommUnityHub.Controllers
         }
 
         // GET: /Offer/Delete/5
+        [Authorize(Roles = "Volunteer")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -122,6 +130,7 @@ namespace CommUnityHub.Controllers
 
         // POST: /Offer/Delete/5
         [HttpPost, ActionName("Delete")]
+        [Authorize(Roles = "Volunteer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
@@ -137,6 +146,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: list all Pending offers
         // GET: /Offer/Pending
+        [Authorize(Roles = "Volunteer")]
         public async Task<IActionResult> Pending()
         {
             var pendingOffers = await _context.Offers
@@ -148,6 +158,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: Approve offer
         [HttpPost]
+        [Authorize(Roles = "Volunteer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
         {
@@ -166,6 +177,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: Reject offer
         [HttpPost]
+        [Authorize(Roles = "Volunteer")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int id)
         {
