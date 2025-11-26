@@ -22,8 +22,8 @@ namespace CommUnityHub
             // Register CSV importer
             builder.Services.AddScoped<CSVImporter>();
 
-            builder.Services.AddDbContext<UserIdentityDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("CommunityHubIdentityDB")));
+            builder.Services.AddDbContext<UserIdentityDbContext>(options => 
+            options.UseSqlServer(builder.Configuration.GetConnectionString("DBStr")));
 
             builder.Services.AddIdentity<User, IdentityRole>()
                 .AddEntityFrameworkStores<UserIdentityDbContext>()
@@ -32,6 +32,7 @@ namespace CommUnityHub
 
             //Register ResourceManager service
             builder.Services.AddScoped<ResourceManager>();
+
 
             var app = builder.Build();
 
@@ -56,7 +57,17 @@ namespace CommUnityHub
                 }
             }
 
-        
+            using (var scope = app.Services.CreateScope())
+            {
+                var services = scope.ServiceProvider;
+
+                // Seed admin user
+                var userContext = services.GetRequiredService<UserIdentityDbContext>();
+                var userManager = services.GetRequiredService<UserManager<User>>();
+                DBInitializer.Initialize(userContext, userManager);
+            }
+
+
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthorization();
