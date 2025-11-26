@@ -9,439 +9,180 @@
     int totalPages = ViewBag.TotalPages ?? 1;
 }
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="utf-8" />
-    <title>@ViewData["Title"]</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <!-- Google Fonts and boostrap for better layout -->
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Roboto', Arial, sans-serif;
-            font-size: 1.05rem;
-            background-color: #f8fafb;
-            color: #1a1a1a;
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
+
+<style>
+    body {
+        background: #f5f7f8;
+        font-family: 'Inter', 'Roboto', sans-serif;
+        color: #2d3436;
+    }
+
+    .page-header {
+        background: #1f6c3f;
+        color: white;
+        border-radius: 12px;
+        padding: 38px 20px;
+        box-shadow: 0 4px 24px rgba(31,108,63,0.18);
+    }
+
+    .card-resource {
+        border-radius: 14px;
+        box-shadow: 0 2px 18px rgba(46,158,86,0.10);
+        transition: transform 0.15s ease, box-shadow 0.15s ease;
+    }
+
+        .card-resource:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 30px rgba(46,158,86,0.22);
         }
 
-        .container {
-            max-width: 1170px;
+    .filter-chip {
+        background: #e7f9ef;
+        color: #187749;
+        border: 1.2px solid #2e9e56;
+        padding: 6px 13px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 500;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-primary-green {
+        background: #187749;
+        border: none;
+        height: 50px;
+        font-weight: 600;
+        border-radius: 12px;
+        box-shadow: 0 2px 10px rgba(24,185,99,0.14);
+        transition: background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+        .btn-primary-green:hover {
+            background: #138856;
+            box-shadow: 0 6px 22px rgba(24,185,99,0.22);
         }
+</style>
 
-        .resource-header {
-            background: linear-gradient(98deg, #e8f5e9 60%, #f5f5f5 100%);
-            box-shadow: 0 2px 32px rgba(38, 86, 66, 0.05);
-        }
+<div class="container mt-4">
 
-        .resource-title {
-            font-size: 48px;
-            color: #1f6c3f;
-            font-weight: 700;
-            letter-spacing: -1px;
-        }
-
-        .resource-desc {
-            max-width: 820px;
-            font-size: 20px;
-            color: #656565;
-        }
-
-        .card {
-            border-radius: 20px !important;
-            padding: 38px 36px !important;
-            background: #fff;
-            box-shadow: 0 6px 32px rgba(28,48,26,.10);
-        }
-
-        .gy-4 {
-            row-gap: 2.2rem !important;
-        }
-
-        .gx-3 {
-            column-gap: 2rem !important;
-        }
-
-        .d-flex.flex-row {
-            display: flex !important;
-            flex-direction: row !important;
-            align-items: center !important;
-            gap: 1.1rem !important;
-        }
-
-        .form-label {
-            margin-bottom: 0.65rem;
-            font-weight: 600;
-        }
-
-        .sleek-input, .form-select {
-            height: 45px;
-            border-radius: 10px !important;
-            border: 1px solid #ccc;
-            font-size: 1em;
-            min-width: 170px;
-            margin-right: 0;
-        }
-
-            .sleek-input:focus, .form-select:focus {
-                border-color: #2e9e56;
-                box-shadow: 0 0 0 0.15rem rgba(46,158,86,0.25);
-                outline: 2px solid #138856;
-            }
-
-        .btn-green-inset {
-            background: #2e9e56;
-            color: #fff;
-            border-radius: 10px !important;
-            width: 48px;
-            height: 45px;
-            border: none;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: background .17s;
-            margin-left: 0 !important;
-        }
-
-            .btn-green-inset:hover {
-                background: #249c6d;
-            }
-
-        .sort-option {
-            padding: 10px 32px;
-            border-radius: 20px !important;
-            border: 2px solid #2e9e56;
-            color: #2e9e56;
-            font-weight: 600;
-            font-size: 1em;
-            margin-right: .35rem;
-            transition: background .18s, color .18s, border .18s;
-        }
-
-            .sort-option.active,
-            .sort-option:focus,
-            .sort-option:hover {
-                background: linear-gradient(90deg,#2e9e56 65%, #33a672 100%);
-                color: #fff !important;
-                box-shadow: 0 2px 12px rgba(46,158,86,0.09);
-                outline: none;
-            }
-
-        .resource-card {
-            border-radius: 18px;
-            box-shadow: 0 4px 20px rgba(46,158,86,.12);
-            background: #fff;
-            transition: transform .19s, box-shadow .19s;
-        }
-
-            .resource-card:hover {
-                transform: translateY(-7px) scale(1.01);
-                box-shadow: 0 8px 32px rgba(46,158,86,.22);
-            }
-
-            .resource-card .card-body {
-                padding: 32px 24px;
-                display: flex;
-                flex-direction: column;
-                height: 100%;
-            }
-
-        .badge {
-            font-size: .96em;
-            border-radius: 7px;
-            padding: 7px 16px;
-        }
-
-        .bg-info.bg-opacity-10 {
-            background: #e7f9ef !important;
-            color: #249c6b !important;
-        }
-
-        .btn-core.btn-green {
-            background-color: #2e9e56;
-            color: white;
-            height: 48px;
-            border-radius: 10px !important;
-            border: none;
-            font-weight: 600;
-            box-shadow: 0 2px 10px rgba(46,158,86,.11);
-            font-size: 1.1em;
-            letter-spacing: 0.03em;
-            transition: background .19s, box-shadow .19s;
-        }
-
-            .btn-core.btn-green:hover {
-                background: linear-gradient(90deg,#24b963 25%, #187749 100%);
-                box-shadow: 0 5px 24px rgba(46,158,86,.18);
-                color: #fff;
-            }
-
-        .filter-tag {
-            background: #2e9e56 !important;
-            color: #fff !important;
-            font-weight: 500;
-            font-size: .98em;
-            border-radius: 20px !important;
-            display: inline-flex;
-            align-items: center;
-            box-shadow: 0 2px 8px rgba(46,158,86,.12);
-            transition: background .17s;
-        }
-
-            .filter-tag.bg-secondary {
-                background: #64748b !important;
-            }
-
-            .filter-tag a {
-                color: #fff !important;
-                margin-left: 9px;
-                transition: opacity .12s;
-                font-size: 1.2em;
-            }
-
-                .filter-tag a:hover {
-                    opacity: .8;
-                }
-
-        .empty-state {
-            background: #fff5e6;
-            color: #b9822f;
-            border: 1.2px solid #f3dfa0;
-            border-radius: 18px;
-            padding: 56px 0 48px 0;
-            margin: 36px auto;
-            max-width: 480px;
-            box-shadow: 0 2px 18px rgba(228,195,73,0.07);
-            text-align: center;
-        }
-
-            .empty-state i {
-                font-size: 3.2em;
-                margin-bottom: 10px;
-                display: block;
-            }
-      
-        @@media (max-width: 991px) {
-            .resource-title {
-                font-size: 36px;
-            }
-
-            .card {
-                padding: 28px 12px !important;
-            }
-
-            .resource-card .card-body {
-                padding: 23px 12px;
-            }
-
-            .gy-4 {
-                row-gap: 1.3rem !important;
-            }
-
-            .gx-3 {
-                column-gap: 1rem !important;
-            }
-
-            .d-flex.flex-row {
-                gap: .75rem !important;
-            }
-        }
-
-        @@media (max-width: 767px) {
-            .card {
-                padding: 18px 6px !important;
-            }
-
-            .resource-desc {
-                font-size: 1em;
-            }
-
-            .d-flex.flex-row {
-                flex-direction: row !important;
-                flex-wrap: wrap !important;
-                gap: .6rem !important;
-            }
-
-            .sleek-input, .form-select {
-                min-width: 150px;
-            }
-
-            .sort-option,
-            .btn-green-inset {
-                width: 90px !important;
-                min-width: 90px;
-                font-size: .99em;
-            }
-        }
-    </style>
-
-</head>
-<body>
-    <!-- main header content-->
-    <div class="py-5 resource-header" style="border-bottom: 4px solid #e4c349;">
-        <div class="container text-center">
-            <h1 class="fw-bold mb-3 resource-title">Resource Hub</h1>
-            <p class="text-secondary mx-auto resource-desc">
-                The CommUnity Hub is your central platform for discovering local services, support programs,
-                and community-focused resources. Explore tools, information, and insights designed to
-                strengthen the well-being of children, youth, and families in our region.
-            </p>
-        </div>
+    <!-- Dashboard Header -->
+    <div class="page-header mb-4">
+        <h1 class="fw-bold mb-2"><i class="bi bi-box-seam me-2"></i>CommUnity Resource Hub</h1>
+        <p class="opacity-75 mb-0" style="font-size:1.1rem;">
+            Discover and access essential community services across regions.
+        </p>
     </div>
-    <!-- filter, serach and sort -->
-    <div class="container mt-5">
-        <div class="card shadow-sm border-0">
-            <div class="card-body py-4">
-                <div class="row gy-4 gx-4">
-                    
-                    <div class="col-lg-4 col-md-12">
-                        <form method="get" action="/Resources/Search">
-                            <label for="searchBox" class="form-label fw-bold text-muted mb-2">Search</label>
-                           
-                            <br />
-                            <div class="d-flex flex-row align-items-center gap-2">
-                                <input id="searchBox" type="text" name="keyword"
-                                       class="form-control sleek-input"
-                                       placeholder="Search resources..."
-                                       value="@ViewBag.SearchTerm" />
-                                <button class="btn btn-green-inset" type="submit">
-                                    <i class="bi bi-search"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <br />
-                    <br />
-                   
-                    <div class="col-lg-4 col-md-12">
-                        <form method="get" action="/Resources/FilterByRegion">
-                            <label for="regionDropdown" class="form-label fw-bold text-muted mb-2">Region</label>
-                           
-                            <br />
-                            <div class="d-flex flex-row align-items-center gap-2">
-                                <select id="regionDropdown" name="region" class="form-select sleek-input">
-                                    <option value="">All Regions</option>
-                                    <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
-                                    <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
-                                    <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
-                                    <option value="York" @(region == "York" ? "selected" : "")>York</option>
-                                    <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
-                                </select>
-                                <button class="btn btn-green-inset" type="submit">
-                                    <i class="bi bi-funnel"></i>
-                                </button>
-                            </div>
-                        </form>
-                    </div>
-                    <br />
-                    <br />
-                 
-                    <div class="col-lg-4 col-md-12">
-                        <label class="form-label fw-bold text-muted mb-2">Sort By Name</label>
-                    
-                        <br />
-                        <br />
-                        <div class="d-flex flex-row align-items-center gap-2">
-                            <a class="btn sort-option @(sortAscending == true ? "active" : "")"
-                               href="@Url.Action("SortResources", "Resources", new { ascending = true })">
-                                <i class="bi bi-sort-alpha-down"></i> A–Z
-                            </a>
-                            <a class="btn sort-option @(sortAscending == false ? "active" : "")"
-                               href="@Url.Action("SortResources", "Resources", new { ascending = false })">
-                                <i class="bi bi-sort-alpha-up"></i> Z–A
-                            </a>
+
+    <!-- Active Filters Bar -->
+    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
+        @if (!string.IsNullOrWhiteSpace(keyword))
+        {
+            <span class="filter-chip">
+                <i class="bi bi-search"></i> @keyword
+                <a href="@Url.Action("loadDashboard", "Resources")" class="text-green">&times;</a>
+            </span>
+        }
+        @if (!string.IsNullOrWhiteSpace(region))
+        {
+            <span class="filter-chip">
+                <i class="bi bi-geo-alt"></i> @region
+                <a href="@Url.Action("loadDashboard", "Resources")" class="text-green">&times;</a>
+            </span>
+        }
+    </div>
+
+    <!-- Filters + Sort Controls -->
+    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
+        <div class="card-body">
+            <div class="row g-3">
+
+                <!-- Search -->
+                <div class="col-lg-4 col-md-12">
+                    <form method="get" action="/Resources/Search">
+                        <label class="form-label fw-semibold">Search Resources</label>
+                        <div class="input-group">
+                            <input id="searchBox" type="text" name="keyword"
+                                   class="form-control" placeholder="Enter keywords..."
+                                   value="@keyword" />
+                            <button class="btn btn-success" type="submit"><i class="bi bi-search"></i></button>
                         </div>
+                    </form>
+                </div>
+
+                <!-- Region Filter -->
+                <div class="col-lg-4 col-md-12">
+                    <form method="get" action="/Resources/FilterByRegion">
+                        <label class="form-label fw-semibold">Filter by Region</label>
+                        <div class="input-group">
+                            <select class="form-select" name="region">
+                                <option value="">All Regions</option>
+                                <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
+                                <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
+                                <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
+                                <option value="York" @(region == "York" ? "selected" : "")>York</option>
+                                <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
+                            </select>
+                            <button class="btn btn-success" type="submit"><i class="bi bi-funnel"></i></button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Sort -->
+                <div class="col-lg-4 col-md-12">
+                    <label class="form-label fw-semibold">Sort by Name</label>
+                    <div class="d-flex">
+                        <a class="btn btn-outline-success me-2 @(sortAscending == true ? "active" : "")"
+                           href="@Url.Action("SortResources", "Resources", new { ascending = true })">
+                            <i class="bi bi-sort-alpha-down"></i> A–Z
+                        </a>
+                        <a class="btn btn-outline-success @(sortAscending == false ? "active" : "")"
+                           href="@Url.Action("SortResources", "Resources", new { ascending = false })">
+                            <i class="bi bi-sort-alpha-up"></i> Z–A
+                        </a>
                     </div>
                 </div>
+
             </div>
         </div>
     </div>
 
-    </div>
-    <!-- Current filters tage-->
-    @if (!string.IsNullOrEmpty(keyword) || !string.IsNullOrEmpty(region))
-    {
-        <div class="container mt-3">
-            <span class="text-muted me-2 fw-semibold">Active filters:</span>
-            @if (!string.IsNullOrEmpty(keyword))
-            {
-                <span class="badge bg-success text-white filter-tag me-2 px-3 py-2">
-                    <i class="bi bi-search me-1"></i> "@keyword"
-                    <a href="@Url.Action("loadDashboard", "Resources")"
-                       class="text-white text-decoration-none ms-2" title="Remove search filter">&times;</a>
-                </span>
-            }
-            @if (!string.IsNullOrEmpty(region))
-            {
-                <span class="badge bg-secondary filter-tag me-2 px-3 py-2">
-                    <i class="bi bi-geo-alt me-1"></i> @region
-                    <a href="@Url.Action("loadDashboard", "Resources")"
-                       class="text-white text-decoration-none ms-2" title="Remove region filter">&times;</a>
-                </span>
-            }
-        </div>
-    }
-    <!--if no results found-->
+    <!-- Empty State -->
     @if (Model == null || !Model.Any())
     {
-        <div class="container mt-5">
-            <div class="empty-state">
-                <i class="bi bi-inbox"></i>
-                <h4 class="text-muted">No Resources Found</h4>
-                <p class="text-secondary">Try adjusting your search or filter criteria.</p>
-            </div>
+        <div class="empty-state">
+            <i class="bi bi-inbox"></i>
+            <h3>No Resources Found</h3>
+            <p>Try clearing your filters or searching with different keywords.</p>
         </div>
     }
     else
     {
-        <!-- total results count-->
-        <div class="container mt-5">
-            <p class="text-muted">
-                <i class="bi bi-list-ul me-1"></i>
-                Showing <strong>@Model.Count()</strong> resource(s)
-            </p>
-        </div>
-        <!-- Resources table/grid-->
-        <div class="container mt-3">
-            <div class="row gy-4 gx-3">
-                @foreach (var r in Model)
-                {
-                    <div class="col-lg-4 col-md-6">
-                        <div class="card h-100 border-0 shadow-sm resource-card">
-                            <div class="card-body d-flex flex-column">
-                                <h4 class="fw-bold mb-2" style="font-size: 1.35rem; color:#1f6c3f;">
-                                    @r.Name
-                                </h4>
+        <!-- Results Count -->
+        <p class="text-secondary fw-medium mb-3"><i class="bi bi-list-check"></i> Results: @Model.Count()</p>
 
-                                <p class="text-muted mb-2" style="font-size: 0.95rem;">
-                                    <strong style="color:#347764;">Category:</strong> @r.Category
-                                </p>
+        <!-- Cards Grid -->
+        <div class="row g-4">
+            @foreach (var r in Model)
+            {
+                <div class="col-lg-4 col-md-6">
+                    <div class="card card-resource border-0 h-100">
+                        <div class="card-body d-flex flex-column">
+                            <h5 class="fw-bold mb-2" style="color:#1f6c3f;">@r.Name</h5>
+                            <p class="text-secondary mb-2"><strong>Category:</strong> @r.Category</p>
+                            <p class="text-secondary small"><i class="bi bi-geo-alt-fill text-danger"></i> @r.Region</p>
 
-                                <p class="text-muted small mb-4">
-                                    <i class="bi bi-geo-alt-fill text-danger me-2"></i> @r.Region
-                                </p>
-
-                                <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })"
-                                   class="btn-core btn-green mt-auto w-100 d-flex justify-content-center align-items-center text-white"
-                                   style="
-                                           font-size: 1.08rem;
-                                           font-weight: 600;
-                                           text-align: center;
-                                           height: 52px;            
-                                           line-height: 52px;          
-                                           padding: 0;                
-                                       ">
-                                    <i class="bi bi-arrow-right-circle me-2"></i>
-                                    <span style="line-height: 1;">View Details</span>
-                                </a>
-
-                            </div>
+                            <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })"
+                               class="btn btn-primary-green mt-auto w-100">
+                                View Details <i class="bi bi-arrow-right-circle"></i>
+                            </a>
                         </div>
                     </div>
-                }
-            </div>
+                </div>
+            }
         </div>
     }
-</body>
-</html>
+</div>
