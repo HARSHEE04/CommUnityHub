@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace CommUnityHub.Models
+namespace CommUnityHub.ViewModels
 {
     public class LoginViewModel
     {
@@ -11,5 +11,8 @@ namespace CommUnityHub.Models
         [Required]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
+        [Display(Name = "Remember Me")]
+        public bool RememberMe { get; set; }
     }
 }
