@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CommUnityHub.Models;
 
-
 namespace CommUnityHub.Controllers
 {
     [Authorize(Roles = "SystemAdmin")]
@@ -16,17 +15,17 @@ namespace CommUnityHub.Controllers
             _userManager = userManager;
         }
 
-        // Dashboard showing all users awaiting verification
+        // GET: /Admin/Dashboard
         public IActionResult Dashboard()
         {
             var pendingUsers = _userManager.Users
                 .Where(u => !u.IsVerified)
                 .ToList();
 
-            return View(pendingUsers); // pass list to view
+            return View(pendingUsers);
         }
 
-        // Approve a user as volunteer
+        // POST: /Admin/ApproveVolunteer
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ApproveVolunteer(string id)
@@ -41,20 +40,22 @@ namespace CommUnityHub.Controllers
             user.IsVerified = true;
             user.IsVolunteer = true;
 
-            var result = await _userManager.UpdateAsync(user);
-            if (result.Succeeded)
+            var updateResult = await _userManager.UpdateAsync(user);
+
+            if (!updateResult.Succeeded)
             {
-                TempData["Success"] = $"{user.FullName} has been approved as a volunteer.";
+                TempData["Error"] = $"Failed to approve volunteer {user.FullName}.";
                 return RedirectToAction(nameof(Dashboard));
             }
-            else
-            {
-                TempData["Error"] = $"Error approving {user.FullName}.";
-                return RedirectToAction(nameof(Dashboard));
-            }
+
+            // Add user to Volunteer role
+            await _userManager.AddToRoleAsync(user, "Volunteer");
+
+            TempData["Success"] = $"{user.FullName} approved as Volunteer.";
+            return RedirectToAction(nameof(Dashboard));
         }
 
-        // Reject user
+        // POST: /Admin/RejectUser
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> RejectUser(string id)
@@ -66,18 +67,17 @@ namespace CommUnityHub.Controllers
             if (user == null)
                 return NotFound();
 
-            // You can delete or just mark as rejected
+            // Delete the account
             var result = await _userManager.DeleteAsync(user);
-            if (result.Succeeded)
+
+            if (!result.Succeeded)
             {
-                TempData["Success"] = $"{user.FullName} has been rejected.";
+                TempData["Error"] = $"Failed to reject (delete) {user.FullName}.";
                 return RedirectToAction(nameof(Dashboard));
             }
-            else
-            {
-                TempData["Error"] = $"Error rejecting {user.FullName}.";
-                return RedirectToAction(nameof(Dashboard));
-            }
+
+            TempData["Success"] = $"{user.FullName} has been removed.";
+            return RedirectToAction(nameof(Dashboard));
         }
     }
 }

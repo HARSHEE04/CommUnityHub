@@ -5,179 +5,117 @@
     string keyword = ViewBag.SearchTerm;
     string region = ViewBag.SelectedRegion;
     bool? sortAscending = ViewBag.SortAscending;
-    int pageNumber = ViewBag.PageNumber ?? 1;
-    int totalPages = ViewBag.TotalPages ?? 1;
 }
 
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
-<link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet">
-
-<style>
-    body {
-        background: #f5f7f8;
-        font-family: 'Inter', 'Roboto', sans-serif;
-        color: #2d3436;
-    }
-
-    .page-header {
-        background: #1f6c3f;
-        color: white;
-        border-radius: 12px;
-        padding: 38px 20px;
-        box-shadow: 0 4px 24px rgba(31,108,63,0.18);
-    }
-
-    .card-resource {
-        border-radius: 14px;
-        box-shadow: 0 2px 18px rgba(46,158,86,0.10);
-        transition: transform 0.15s ease, box-shadow 0.15s ease;
-    }
-
-        .card-resource:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 30px rgba(46,158,86,0.22);
-        }
-
-    .filter-chip {
-        background: #e7f9ef;
-        color: #187749;
-        border: 1.2px solid #2e9e56;
-        padding: 6px 13px;
-        border-radius: 30px;
-        font-size: 0.9rem;
-        font-weight: 500;
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-    }
-
-    .btn-primary-green {
-        background: #187749;
-        border: none;
-        height: 50px;
-        font-weight: 600;
-        border-radius: 12px;
-        box-shadow: 0 2px 10px rgba(24,185,99,0.14);
-        transition: background 0.15s ease, box-shadow 0.15s ease;
-    }
-
-        .btn-primary-green:hover {
-            background: #138856;
-            box-shadow: 0 6px 22px rgba(24,185,99,0.22);
-        }
-</style>
-
-<div class="container mt-4">
-
-    <!-- Dashboard Header -->
-    <div class="page-header mb-4">
-        <h1 class="fw-bold mb-2"><i class="bi bi-box-seam me-2"></i>CommUnity Resource Hub</h1>
-        <p class="opacity-75 mb-0" style="font-size:1.1rem;">
-            Discover and access essential community services across regions.
+<!-- Header with gradient background -->
+<div class="py-5 text-center" style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+    <div class="container">
+        <h1 class="fw-bold mb-3 text-primary">Resource Hub</h1>
+        <p class="text-dark mx-auto" style="max-width: 800px;">
+            The CommUnity Hub is your central platform for discovering local services, support programs,
+            and community-focused resources. Explore tools, information, and insights designed to
+            strengthen the well-being of children, youth, and families in our region.
         </p>
     </div>
+</div>
 
-    <!-- Active Filters Bar -->
-    <div class="d-flex flex-wrap align-items-center gap-2 mb-4">
-        @if (!string.IsNullOrWhiteSpace(keyword))
-        {
-            <span class="filter-chip">
-                <i class="bi bi-search"></i> @keyword
-                <a href="@Url.Action("loadDashboard", "Resources")" class="text-green">&times;</a>
-            </span>
-        }
-        @if (!string.IsNullOrWhiteSpace(region))
-        {
-            <span class="filter-chip">
-                <i class="bi bi-geo-alt"></i> @region
-                <a href="@Url.Action("loadDashboard", "Resources")" class="text-green">&times;</a>
-            </span>
-        }
-    </div>
-
-    <!-- Filters + Sort Controls -->
-    <div class="card border-0 shadow-sm mb-4" style="border-radius:12px;">
-        <div class="card-body">
-            <div class="row g-3">
+<!-- Search, Filter, Sort -->
+<div class="container mt-5">
+    <div class="card shadow-sm border-0">
+        <div class="card-body py-4">
+            <div class="row g-4">
 
                 <!-- Search -->
                 <div class="col-lg-4 col-md-12">
-                    <form method="get" action="/Resources/Search">
-                        <label class="form-label fw-semibold">Search Resources</label>
-                        <div class="input-group">
-                            <input id="searchBox" type="text" name="keyword"
-                                   class="form-control" placeholder="Enter keywords..."
-                                   value="@keyword" />
-                            <button class="btn btn-success" type="submit"><i class="bi bi-search"></i></button>
-                        </div>
+                    <form method="get" action="/Resources/Search" class="d-flex gap-2">
+                        <input type="text" name="keyword" class="form-control" placeholder="Search resources..." value="@ViewBag.SearchTerm">
+                        <button class="btn btn-primary" type="submit">
+                            <i class="bi bi-search"></i>
+                        </button>
                     </form>
                 </div>
 
-                <!-- Region Filter -->
+                <!-- Filter by Region -->
                 <div class="col-lg-4 col-md-12">
-                    <form method="get" action="/Resources/FilterByRegion">
-                        <label class="form-label fw-semibold">Filter by Region</label>
-                        <div class="input-group">
-                            <select class="form-select" name="region">
-                                <option value="">All Regions</option>
-                                <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
-                                <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
-                                <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
-                                <option value="York" @(region == "York" ? "selected" : "")>York</option>
-                                <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
-                            </select>
-                            <button class="btn btn-success" type="submit"><i class="bi bi-funnel"></i></button>
-                        </div>
+                    <form method="get" action="/Resources/FilterByRegion" class="d-flex gap-2">
+                        <select name="region" class="form-select">
+                            <option value="">All Regions</option>
+                            <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
+                            <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
+                            <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
+                            <option value="York" @(region == "York" ? "selected" : "")>York</option>
+                            <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
+                        </select>
+                        <button class="btn btn-warning text-white" type="submit">
+                            <i class="bi bi-funnel"></i>
+                        </button>
                     </form>
                 </div>
 
                 <!-- Sort -->
-                <div class="col-lg-4 col-md-12">
-                    <label class="form-label fw-semibold">Sort by Name</label>
-                    <div class="d-flex">
-                        <a class="btn btn-outline-success me-2 @(sortAscending == true ? "active" : "")"
-                           href="@Url.Action("SortResources", "Resources", new { ascending = true })">
-                            <i class="bi bi-sort-alpha-down"></i> A–Z
-                        </a>
-                        <a class="btn btn-outline-success @(sortAscending == false ? "active" : "")"
-                           href="@Url.Action("SortResources", "Resources", new { ascending = false })">
-                            <i class="bi bi-sort-alpha-up"></i> Z–A
-                        </a>
-                    </div>
+                <div class="col-lg-4 col-md-12 d-flex align-items-center gap-2">
+                    <a class="btn btn-outline-primary @(sortAscending == true ? "active" : "")"
+                       href="@Url.Action("SortResources", "Resources", new { ascending = true })">
+                        <i class="bi bi-sort-alpha-down"></i> A–Z
+                    </a>
+                    <a class="btn btn-outline-primary @(sortAscending == false ? "active" : "")"
+                       href="@Url.Action("SortResources", "Resources", new { ascending = false })">
+                        <i class="bi bi-sort-alpha-up"></i> Z–A
+                    </a>
                 </div>
 
             </div>
         </div>
     </div>
+</div>
 
-    <!-- Empty State -->
+<!-- Active filters -->
+@if (!string.IsNullOrEmpty(keyword) || !string.IsNullOrEmpty(region))
+{
+    <div class="container mt-3">
+        <span class="text-muted fw-semibold me-2">Active filters:</span>
+        @if (!string.IsNullOrEmpty(keyword))
+        {
+            <span class="badge bg-primary me-2">
+                <i class="bi bi-search me-1"></i> "@keyword"
+                <a href="@Url.Action("loadDashboard", "Resources")" class="text-white text-decoration-none ms-2">&times;</a>
+            </span>
+        }
+        @if (!string.IsNullOrEmpty(region))
+        {
+            <span class="badge bg-warning text-dark me-2">
+                <i class="bi bi-geo-alt me-1"></i> @region
+                <a href="@Url.Action("loadDashboard", "Resources")" class="text-dark text-decoration-none ms-2">&times;</a>
+            </span>
+        }
+    </div>
+}
+
+<!-- Resources List -->
+<div class="container mt-5">
     @if (Model == null || !Model.Any())
     {
-        <div class="empty-state">
-            <i class="bi bi-inbox"></i>
-            <h3>No Resources Found</h3>
-            <p>Try clearing your filters or searching with different keywords.</p>
+        <div class="text-center p-5 bg-light rounded shadow-sm">
+            <i class="bi bi-inbox display-4 mb-3 text-muted"></i>
+            <h4 class="text-muted">No Resources Found</h4>
+            <p class="text-secondary">Try adjusting your search or filter criteria.</p>
         </div>
     }
     else
     {
-        <!-- Results Count -->
-        <p class="text-secondary fw-medium mb-3"><i class="bi bi-list-check"></i> Results: @Model.Count()</p>
+        <p class="text-muted"><i class="bi bi-list-ul me-1"></i> Showing <strong>@Model.Count()</strong> resource(s)</p>
 
-        <!-- Cards Grid -->
         <div class="row g-4">
             @foreach (var r in Model)
             {
                 <div class="col-lg-4 col-md-6">
-                    <div class="card card-resource border-0 h-100">
+                    <div class="card h-100 border-0 shadow-sm">
                         <div class="card-body d-flex flex-column">
-                            <h5 class="fw-bold mb-2" style="color:#1f6c3f;">@r.Name</h5>
-                            <p class="text-secondary mb-2"><strong>Category:</strong> @r.Category</p>
-                            <p class="text-secondary small"><i class="bi bi-geo-alt-fill text-danger"></i> @r.Region</p>
-
-                            <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })"
-                               class="btn btn-primary-green mt-auto w-100">
-                                View Details <i class="bi bi-arrow-right-circle"></i>
+                            <h4 class="fw-bold text-primary">@r.Name</h4>
+                            <p class="text-dark mb-1"><strong>Category:</strong> @r.Category</p>
+                            <p class="text-dark small"><i class="bi bi-geo-alt-fill text-warning me-2"></i> @r.Region</p>
+                            <a href="@Url.Action("viewDetails", "Resources", new { id = r.Id })" class="btn btn-primary mt-auto">
+                                <i class="bi bi-arrow-right-circle me-2"></i> View Details
                             </a>
                         </div>
                     </div>

@@ -1,5 +1,92 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>@ViewData["Title"] - CommUnityHub</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/lib/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
+
+    <link href="~/css/site.css" rel="stylesheet" />
+</head>
+<body class="bg-light" style="font-family:'Roboto', Arial, sans-serif;">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-lg shadow-sm py-3" style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+        <div class="container">
+
+            <a class="navbar-brand fw-bold text-primary" href="/Resources/loadDashboard">
+                CommUnityHub
+            </a>
+
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                    data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarNav">
+
+                <!-- LEFT LINKS -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="/Resources/loadDashboard">Resources</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" href="/Offer/Index">Offers</a>
+                    </li>
+
+                    @if (User.IsInRole("Volunteer"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-primary" href="/Offer/Create">Create Offer</a>
+                        </li>
+                    }
+
+                    @if (User.IsInRole("Admin"))
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-warning fw-bold" href="/Admin/Dashboard">Admin Panel</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-warning" href="/Offer/Pending">Pending Offers</a>
+                        </li>
+                    }
+                </ul>
+
+                <!-- RIGHT LINKS -->
+                <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                    @if (User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <span class="nav-link text-primary">Hello, @User.Identity.Name</span>
+                        </li>
+                        <li class="nav-item">
+                            <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
+                                <button class="btn btn-outline-primary">Logout</button>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item me-2">
+                            <a class="btn btn-primary" href="/Account/Login">Login</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn btn-warning text-white" href="/Account/Register">Register</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT -->
+    <main class="container mt-4">
+        @RenderBody()
+    </main>
+
+    <script src="~/lib/bootstrap/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
