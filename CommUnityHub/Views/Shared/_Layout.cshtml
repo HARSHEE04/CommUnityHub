@@ -8,15 +8,12 @@
     <!-- Bootstrap CSS -->
     <link href="~/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet" />
     <link href="~/lib/bootstrap-icons/bootstrap-icons.css" rel="stylesheet" />
-
-    <link href="~/css/site.css" rel="stylesheet" />
 </head>
-<body class="bg-light" style="font-family:'Roboto', Arial, sans-serif;">
+<body style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%); font-family:'Roboto', Arial, sans-serif;">
 
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg shadow-sm py-3" style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm py-3">
         <div class="container">
-
             <a class="navbar-brand fw-bold text-primary" href="/Resources/loadDashboard">
                 CommUnityHub
             </a>
@@ -27,41 +24,26 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarNav">
-
-                <!-- LEFT LINKS -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" href="/Resources/loadDashboard">Resources</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link text-primary" href="/Offer/Index">Offers</a>
-                    </li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="/Resources/loadDashboard">Resources</a></li>
+                    <li class="nav-item"><a class="nav-link text-primary" href="/Offer/Index">Offers</a></li>
 
                     @if (User.IsInRole("Volunteer"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-primary" href="/Offer/Create">Create Offer</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link text-primary" href="/Offer/Create">Create Offer</a></li>
                     }
 
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="nav-item">
-                            <a class="nav-link text-warning fw-bold" href="/Admin/Dashboard">Admin Panel</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-warning" href="/Offer/Pending">Pending Offers</a>
-                        </li>
+                        <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/Admin/Dashboard">Admin Panel</a></li>
+                        <li class="nav-item"><a class="nav-link text-warning" href="/Offer/Pending">Pending Offers</a></li>
                     }
                 </ul>
 
-                <!-- RIGHT LINKS -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     @if (User.Identity.IsAuthenticated)
                     {
-                        <li class="nav-item">
-                            <span class="nav-link text-primary">Hello, @User.Identity.Name</span>
-                        </li>
+                        <li class="nav-item"><span class="nav-link text-primary">Hello, @User.Identity.Name</span></li>
                         <li class="nav-item">
                             <form method="post" asp-controller="Account" asp-action="Logout" class="d-inline">
                                 <button class="btn btn-outline-primary">Logout</button>
@@ -70,19 +52,14 @@
                     }
                     else
                     {
-                        <li class="nav-item me-2">
-                            <a class="btn btn-primary" href="/Account/Login">Login</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="btn btn-warning text-white" href="/Account/Register">Register</a>
-                        </li>
+                        <li class="nav-item me-2"><a class="btn btn-primary" href="/Account/Login">Login</a></li>
+                        <li class="nav-item"><a class="btn btn-warning text-white" href="/Account/Register">Register</a></li>
                     }
                 </ul>
             </div>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT -->
     <main class="container mt-4">
         @RenderBody()
     </main>
