@@ -146,7 +146,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: list all Pending offers
         // GET: /Offer/Pending
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "SystemAdmin")]
         public async Task<IActionResult> Pending()
         {
             var pendingOffers = await _context.Offers
@@ -158,7 +158,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: Approve offer
         [HttpPost]
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "SystemAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Approve(int id)
         {
@@ -177,7 +177,7 @@ namespace CommUnityHub.Controllers
 
         // ADMIN: Reject offer
         [HttpPost]
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "SystemAdmin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Reject(int id)
         {
