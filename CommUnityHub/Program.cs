@@ -44,9 +44,11 @@ namespace CommUnityHub
                     Console.WriteLine(">>> RUNNING CSV IMPORTER <<<");
 
                     var importer = scope.ServiceProvider.GetRequiredService<CSVImporter>();
-                    importer.ImportResourcesFromCSV(
-                        @"C:\Users\Harsh\source\repos\CommUnityHub\CommUnityHub\Data\CommunityServices.csv"
-                    );
+
+                    var env = scope.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
+                    string csvPath = Path.Combine(env.ContentRootPath, "Data", "CommunityServices.csv");
+
+                    importer.ImportResourcesFromCSV(csvPath);
 
                     Console.WriteLine(">>> IMPORT COMPLETE <<<");
                 }
