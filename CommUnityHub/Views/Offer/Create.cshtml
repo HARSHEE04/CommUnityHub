@@ -4,38 +4,44 @@
     ViewData["Title"] = "Offer Help";
 }
 
-<div class="container mt-4">
+<div class="py-5 text-center" style="background: linear-gradient(90.4deg, rgb(255, 220, 163) 21.2%, rgb(129, 255, 239) 90.7%);">
+    <div class="container">
+        <h1 class="fw-bold text-primary">Offer Help</h1>
+        <p class="text-dark mx-auto" style="max-width:700px;">
+            Share how you can support others – your offer will be reviewed by an admin before it becomes public.
+        </p>
+    </div>
+</div>
+
+<div class="container my-5">
     <div class="row justify-content-center">
         <div class="col-lg-8 col-md-10">
-            <div class="card shadow-sm">
+            <div class="card shadow-sm rounded-4 border-0">
                 <div class="card-body">
-                    <h2 class="card-title mb-3">Offer Help</h2>
-                    <p class="text-muted">
-                        Share how you can support others – your offer will be reviewed by an admin before it becomes public.
-                    </p>
+                    <h3 class="fw-bold text-success mb-3">Submit Your Offer</h3>
 
                     <form asp-action="Create" method="post">
                         <div class="mb-3">
-                            <label asp-for="Title" class="form-label"></label>
-                            <input asp-for="Title" class="form-control" />
+                            <label asp-for="Title" class="form-label fw-semibold"></label>
+                            <input asp-for="Title" class="form-control border-success" />
                             <span asp-validation-for="Title" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Category" class="form-label"></label>
-                            <input asp-for="Category" class="form-control" />
+                            <label asp-for="Category" class="form-label fw-semibold"></label>
+                            <input asp-for="Category" class="form-control border-success" />
                             <span asp-validation-for="Category" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Description" class="form-label"></label>
-                            <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                            <label asp-for="Description" class="form-label fw-semibold"></label>
+                            <textarea asp-for="Description" class="form-control border-success" rows="4"></textarea>
                             <span asp-validation-for="Description" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Location" class="form-label"></label>
-                            <input asp-for="Location" class="form-control" />
+                            <label asp-for="Location" class="form-label fw-semibold"></label>
+                            <input asp-for="Location" class="form-control border-success" />
                             <span asp-validation-for="Location" class="text-danger"></span>
                         </div>
 
@@ -49,7 +55,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

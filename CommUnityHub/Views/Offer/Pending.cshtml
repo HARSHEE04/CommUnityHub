@@ -4,19 +4,27 @@
     ViewData["Title"] = "Pending Offers";
 }
 
-<div class="container mt-4">
-    <h2>Pending Offers (Admin Review)</h2>
-    <p class="text-muted">Approve or reject offers submitted by community members.</p>
+<div class="py-5 text-center" style="background: linear-gradient(90.4deg, rgb(255,220,163) 21.2%, rgb(129,255,239) 90.7%);">
+    <div class="container">
+        <h1 class="fw-bold text-primary">Pending Offers</h1>
+        <p class="text-dark mx-auto" style="max-width:700px;">
+            Approve or reject offers submitted by community members.
+        </p>
+    </div>
+</div>
+
+<div class="container my-5">
+    <h3 class="fw-semibold mb-3">Pending Offers (Admin Review)</h3>
 
     @if (!Model.Any())
     {
-        <div class="alert alert-info mt-3">
+        <div class="alert alert-warning mt-3">
             There are no pending offers to review.
         </div>
     }
     else
     {
-        <div class="card shadow-sm mt-3">
+        <div class="card shadow-sm rounded-4 border-0 mt-3">
             <div class="card-body p-0">
                 <table class="table table-hover mb-0">
                     <thead class="table-light">
@@ -38,11 +46,11 @@
                                 <td>@offer.Status</td>
                                 <td>
                                     <form asp-action="Approve" asp-route-id="@offer.OfferId" method="post" style="display:inline">
-                                        <button type="submit" class="btn btn-sm btn-success me-1">Approve</button>
+                                        <button type="submit" class="btn btn-sm btn-success me-1 shadow-sm">Approve</button>
                                     </form>
 
                                     <form asp-action="Reject" asp-route-id="@offer.OfferId" method="post" style="display:inline">
-                                        <button type="submit" class="btn btn-sm btn-warning">Reject</button>
+                                        <button type="submit" class="btn btn-sm btn-warning shadow-sm">Reject</button>
                                     </form>
                                 </td>
                             </tr>
