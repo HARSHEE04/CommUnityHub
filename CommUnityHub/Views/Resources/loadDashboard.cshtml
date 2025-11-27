@@ -28,10 +28,15 @@
                 <!-- Search -->
                 <div class="col-lg-4 col-md-12">
                     <form method="get" action="/Resources/Search" class="d-flex gap-2">
-                        <input type="text" name="keyword" class="form-control" placeholder="Search resources..." value="@ViewBag.SearchTerm">
-                        <button class="btn btn-primary" type="submit">
-                            <!-- Search Icon Added Here -->
-                            <i class="bi bi-search"></i>
+                        <div class="input-group rounded-3">
+                            <!-- Search symbol: White text on blue background (Good contrast) -->
+                            <span class="input-group-text bg-primary text-white border-primary rounded-start-3">
+                                <i class="bi bi-search"></i>
+                            </span>
+                            <input type="text" name="keyword" class="form-control" placeholder="Search resources..." value="@ViewBag.SearchTerm">
+                        </div>
+                        <button class="btn btn-primary rounded-3" type="submit">
+                            <i class="bi bi-arrow-right"></i>
                         </button>
                     </form>
                 </div>
@@ -39,16 +44,21 @@
                 <!-- Filter by Region -->
                 <div class="col-lg-4 col-md-12">
                     <form method="get" action="/Resources/FilterByRegion" class="d-flex gap-2">
-                        <select name="region" class="form-select">
-                            <option value="">All Regions</option>
-                            <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
-                            <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
-                            <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
-                            <option value="York" @(region == "York" ? "selected" : "")>York</option>
-                            <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
-                        </select>
-                        <button class="btn btn-warning text-white" type="submit">
-                            <!-- Filter Icon Added Here -->
+                        <div class="input-group rounded-3">
+                            <!-- FIX: Changed text-white to text-dark for better visibility on yellow (bg-warning) -->
+                            <span class="input-group-text bg-warning text-dark border-warning rounded-start-3">
+                                <i class="bi bi-geo-alt-fill"></i>
+                            </span>
+                            <select name="region" class="form-select">
+                                <option value="">All Regions</option>
+                                <option value="Peel" @(region == "Peel" ? "selected" : "")>Peel</option>
+                                <option value="Halton" @(region == "Halton" ? "selected" : "")>Halton</option>
+                                <option value="Toronto" @(region == "Toronto" ? "selected" : "")>Toronto</option>
+                                <option value="York" @(region == "York" ? "selected" : "")>York</option>
+                                <option value="Durham" @(region == "Durham" ? "selected" : "")>Durham</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-warning text-white rounded-3" type="submit">
                             <i class="bi bi-funnel"></i>
                         </button>
                     </form>
@@ -85,6 +95,7 @@
         }
         @if (!string.IsNullOrEmpty(region))
         {
+            <!-- Updated to use text-dark for visibility -->
             <span class="badge bg-warning text-dark me-2">
                 <i class="bi bi-geo-alt me-1"></i> @region
                 <a href="@Url.Action("loadDashboard", "Resources")" class="text-dark text-decoration-none ms-2">&times;</a>
