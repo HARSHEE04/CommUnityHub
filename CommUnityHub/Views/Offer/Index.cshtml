@@ -16,9 +16,14 @@
 <div class="container my-5">
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h3 class="fw-semibold">Community Offers</h3>
-        <a asp-controller="Offer" asp-action="Create" class="btn btn-success shadow-sm">
-            + Create New Offer
-        </a>
+
+        @* Checking if user is Admin OR Volunteer *@
+        @if (User.IsInRole("Volunteer") || User.IsInRole("Admin"))
+        {
+            <a asp-controller="Offer" asp-action="Create" class="btn btn-success shadow-sm">
+                + Create New Offer
+            </a>
+        }
     </div>
 
     @if (!Model.Any())
@@ -38,7 +43,12 @@
                             <th>Category</th>
                             <th>Location</th>
                             <th>Status</th>
-                            <th style="width: 160px;"></th>
+
+                            @* Conditionally display the Actions column header *@
+                            @if (User.IsInRole("Volunteer") || User.IsInRole("Admin"))
+                            {
+                                <th style="width: 160px;">Actions</th>
+                            }
                         </tr>
                     </thead>
                     <tbody>
@@ -49,12 +59,17 @@
                                 <td>@offer.Category</td>
                                 <td>@offer.Location</td>
                                 <td>@offer.Status</td>
-                                <td>
-                                    <a asp-action="Edit" asp-route-id="@offer.OfferId"
-                                       class="btn btn-sm btn-outline-warning me-1">Edit</a>
-                                    <a asp-action="Delete" asp-route-id="@offer.OfferId"
-                                       class="btn btn-sm btn-outline-danger">Delete</a>
-                                </td>
+
+                                @* Conditionally display the Edit/Delete buttons cell *@
+                                @if (User.IsInRole("Volunteer") || User.IsInRole("Admin"))
+                                {
+                                    <td>
+                                        <a asp-action="Edit" asp-route-id="@offer.OfferId"
+                                           class="btn btn-sm btn-outline-warning me-1">Edit</a>
+                                        <a asp-action="Delete" asp-route-id="@offer.OfferId"
+                                           class="btn btn-sm btn-outline-danger">Delete</a>
+                                    </td>
+                                }
                             </tr>
                         }
                     </tbody>
