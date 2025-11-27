@@ -12,7 +12,7 @@ using Xunit;
 
 namespace CommUnityHub.Tests
 {
-    // Helper class to mock Identity services required by UserManager (Kept for complexity management)
+    // Helper class to mock Identity services required by UserManager
     public static class MockHelpers
     {
         public static Mock<UserManager<TUser>> MockUserManager<TUser>(List<TUser> users = null) where TUser : class
@@ -25,7 +25,7 @@ namespace CommUnityHub.Tests
             {
                 userManager.Setup(m => m.Users).Returns(users.AsQueryable());
             }
-            // IMPORTANT: If 'users' is null, m.Users is NOT set up for LINQ querying.
+            // If 'users' is null, m.Users is NOT set up for LINQ querying.
             // This is fine for tests that don't query the list (like Approve/Reject).
             else
             {
@@ -44,7 +44,7 @@ namespace CommUnityHub.Tests
             return controller;
         }
 
-        // HELPER METHOD: Creates a clean test user copy for each test
+        // Creates a clean test user copy for each test
         public static User CreateTestUser(string id = "u1", string fullName = "Pending Volunteer")
         {
             return new User
@@ -68,9 +68,7 @@ namespace CommUnityHub.Tests
             new User { Id = "u3", FullName = "Unrequested Member", Email = "anon@hub.ca", IsVerified = false, IsVolunteer = false }
         };
 
-        // =========================================================
         // 1. DASHBOARD TEST (Verify pending users appear)
-        // =========================================================
 
         [Fact]
         public void Dashboard_ReturnsViewWithPendingUsers()
@@ -90,17 +88,13 @@ namespace CommUnityHub.Tests
             Assert.Equal(2, model.Count());
         }
 
-        // =========================================================
         // 2. APPROVE VOLUNTEER TEST (Verify user is validated and role is added)
-        // =========================================================
 
         [Fact]
         public async Task ApproveVolunteer_ValidId_SetsFlagsAndRedirects()
         {
             // Arrange
-            var userToApprove = MockHelpers.CreateTestUser(); // FRESH user object
-
-            // FIX: Explicitly specify the generic type <User>
+            var userToApprove = MockHelpers.CreateTestUser(); // user object
             var userManagerMock = MockHelpers.MockUserManager<User>(null);
 
             // Mock necessary Identity calls for the success path
@@ -125,17 +119,14 @@ namespace CommUnityHub.Tests
             userManagerMock.Verify(m => m.AddToRoleAsync(userToApprove, "Volunteer"), Times.Once());
         }
 
-        // =========================================================
         // 3. REJECT USER TEST (Verify user is deleted)
-        // =========================================================
 
         [Fact]
         public async Task RejectUser_ValidId_DeletesUserAndRedirects()
         {
             // Arrange
-            var userToReject = MockHelpers.CreateTestUser(); // FRESH user object
+            var userToReject = MockHelpers.CreateTestUser(); // user object
 
-            // FIX: Explicitly specify the generic type <User>
             var userManagerMock = MockHelpers.MockUserManager<User>(null);
 
             // Mock necessary Identity calls for the success path
