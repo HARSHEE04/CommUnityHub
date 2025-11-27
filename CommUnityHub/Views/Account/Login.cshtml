@@ -38,14 +38,6 @@
                             <span asp-validation-for="Password" class="text-danger"></span>
                         </div>
 
-                        <!-- NEW: RememberMe Checkbox from LoginViewModel -->
-                        <div class="form-check mb-4">
-                            <input class="form-check-input" type="checkbox" asp-for="RememberMe">
-                            <label class="form-check-label" asp-for="RememberMe">
-                                @Html.DisplayNameFor(m => m.RememberMe)
-                            </label>
-                        </div>
-
                         <button type="submit" class="btn btn-primary w-100 rounded-3">
                             Login
                         </button>

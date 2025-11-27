@@ -15,13 +15,14 @@ namespace CommUnityHub
        
             builder.Services.AddControllersWithViews();
 
-            // Register DbContext
+            // Register DbContext for Resources
             builder.Services.AddDbContext<ResourceDbContext>(options =>
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Register CSV importer
             builder.Services.AddScoped<CSVImporter>();
 
+            // // Register DbContext
             builder.Services.AddDbContext<UserIdentityDbContext>(options => 
             options.UseSqlServer(builder.Configuration.GetConnectionString("DBStr")));
 
@@ -59,17 +60,18 @@ namespace CommUnityHub
                 }
             }
 
+            // Services for UserIdentityDbContext
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
                 var context = services.GetRequiredService<UserIdentityDbContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
                 var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>(); 
-
+                // seed roles and admin data
                 DBInitializer.Initialize(context, userManager, roleManager).GetAwaiter().GetResult();
             }
 
-
+            // Middleware needed for Project to run
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();

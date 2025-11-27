@@ -111,7 +111,7 @@ namespace CommUnityHub.Tests
             var redirect = Assert.IsType<RedirectToActionResult>(result);
             Assert.Equal(nameof(AdminController.Dashboard), redirect.ActionName);
 
-            // Verify model state changes on the fresh object
+            // Verify model state changes on the object
             Assert.True(userToApprove.IsVerified);
             Assert.True(userToApprove.IsVolunteer);
 

@@ -2,6 +2,7 @@
 
 namespace CommUnityHub.Models
 {
+    // User class Inherits from IdentityUser classs the implements ASP.Net Identity Framework
     public class User : IdentityUser
     {
         public string FullName { get; set; }   
