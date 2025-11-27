@@ -25,21 +25,26 @@
 
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- Resources & Offers Index: Accessible to ALL (Guest, CommunityMember, Volunteer, Admin) -->
                     <li class="nav-item"><a class="nav-link text-primary" href="/Resources/loadDashboard">Resources</a></li>
                     <li class="nav-item"><a class="nav-link text-primary" href="/Offer/Index">Offers</a></li>
 
-                    @if (User.IsInRole("Volunteer"))
+                    <!-- Offer Management Links: Accessible to Volunteers OR Admins -->
+                    @if (User.IsInRole("Volunteer") || User.IsInRole("Admin"))
                     {
-                        <li class="nav-item"><a class="nav-link text-primary" href="/Offer/Create">Create Offer</a></li>
+                        <!-- Create Offer link. Volunteers and Admins can create. -->
+                        <li class="nav-item"><a class="nav-link text-success" href="/Offer/Create">Create Offer</a></li>
                     }
 
+                    <!-- Admin-Only Links: Accessible only to Admins -->
                     @if (User.IsInRole("Admin"))
                     {
-                        <li class="nav-item"><a class="nav-link text-warning fw-bold" href="/Admin/Dashboard">Admin Panel</a></li>
-                        <li class="nav-item"><a class="nav-link text-warning" href="/Offer/Pending">Pending Offers</a></li>
+                        <li class="nav-item"><a class="nav-link text-danger fw-bold" href="/Admin/Dashboard">Admin Panel</a></li>
+                        <li class="nav-item"><a class="nav-link text-danger" href="/Offer/Pending">Pending Offers</a></li>
                     }
                 </ul>
 
+                <!-- User Authentication (Login/Logout) -->
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                     @if (User.Identity.IsAuthenticated)
                     {
