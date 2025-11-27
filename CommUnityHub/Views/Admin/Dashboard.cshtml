@@ -54,8 +54,8 @@
 
                             @if (!user.IsVerified)
                             {
-                                <form asp-action="ValidateUser" method="post" class="mt-auto">
-                                    <input type="hidden" name="userId" value="@user.Id" />
+                                <form asp-action="ApproveVolunteer" method="post" class="mt-auto">
+                                    <input type="hidden" name="id" value="@user.Id" />
 
                                     <button type="submit"
                                             class="btn btn-success w-100 rounded-3 fw-semibold">

@@ -23,6 +23,8 @@
                     <h3 class="text-center fw-bold text-primary mb-4">Register</h3>
 
                     <form method="post">
+                        <!-- Validation Summary for general errors like failed creation -->
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                         <div class="mb-3">
                             <label>Full Name</label>
@@ -46,6 +48,14 @@
                             <label>Confirm Password</label>
                             <input asp-for="ConfirmPassword" class="form-control rounded-3" placeholder="Re-enter your password" type="password" />
                             <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                        </div>
+
+                        <!-- NEW: IsVolunteer Checkbox from RegisterViewModel -->
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" asp-for="IsVolunteer">
+                            <label class="form-check-label" asp-for="IsVolunteer">
+                                Register as a potential Volunteer (Requires Admin approval)
+                            </label>
                         </div>
 
                         <button type="submit" class="btn btn-primary w-100 rounded-3">

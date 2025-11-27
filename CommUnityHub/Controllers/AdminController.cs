@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using CommUnityHub.Models;
+using System.Linq; // Required for .Where() and .ToList()
 
 namespace CommUnityHub.Controllers
 {
-    [Authorize(Roles = "SystemAdmin")]
+    // FIX: Change role name from "SystemAdmin" to the standardized "Admin"
+    [Authorize(Roles = "Admin")]
     public class AdminController : Controller
     {
         private readonly UserManager<User> _userManager;
@@ -18,6 +20,10 @@ namespace CommUnityHub.Controllers
         // GET: /Admin/Dashboard
         public IActionResult Dashboard()
         {
+            // Note: The AdminController needs access to the System.Linq namespace
+            // for the .Where() and .ToList() extensions, which I've added above.
+
+            // This retrieves users who haven't been verified yet (potential volunteers)
             var pendingUsers = _userManager.Users
                 .Where(u => !u.IsVerified)
                 .ToList();
@@ -49,6 +55,9 @@ namespace CommUnityHub.Controllers
             }
 
             // Add user to Volunteer role
+            // This assumes the user being approved is currently only in the "CommunityMember" role.
+            // If they are not, you might need logic to remove the old role first, but typically
+            // a user can be in multiple roles.
             await _userManager.AddToRoleAsync(user, "Volunteer");
 
             TempData["Success"] = $"{user.FullName} approved as Volunteer.";
