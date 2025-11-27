@@ -16,7 +16,8 @@
 
 <div class="container my-5">
     <div class="card shadow-sm border-0 rounded-4">
-        <div class="card-body">
+        <!-- APPLY STYLING HERE: Ensures long strings (like URLs in the description) wrap correctly -->
+        <div class="card-body" style="word-wrap: break-word; overflow-wrap: break-word;">
 
             <!-- Title + quick meta -->
             <h3 class="fw-bold text-primary mb-3"><i class="bi bi-info-circle me-2 text-success"></i>@Model.Name</h3>
@@ -41,6 +42,19 @@
 
             <hr />
 
+            <!-- Description (Often contains long URLs/text) -->
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {
+                <div class="mb-3">
+                    <h6 class="fw-semibold text-primary">Description</h6>
+                    <!-- Applying text-break class and inline style for robust wrapping -->
+                    <div class="text-dark text-break">
+                        @Html.Raw(Model.Description)
+                    </div>
+                </div>
+                <hr />
+            }
+
             <!-- Phone -->
             @{
                 var cleanPhone = (Model.Phone ?? "").Trim();
@@ -49,7 +63,7 @@
             {
                 <div class="mb-3">
                     <h6 class="fw-semibold text-primary">Phone</h6>
-                    <div class="text-dark">
+                    <div class="text-dark text-break">
                         @foreach (var line in cleanPhone.Split(new[] { "<br>", "<br/>", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries))
                         {
                             <div>@Html.Raw(line)</div>
@@ -66,7 +80,7 @@
             {
                 <div class="mb-3">
                     <h6 class="fw-semibold text-primary">Hours of Operation</h6>
-                    <div class="text-dark">@Html.Raw(Model.HoursOfOperation)</div>
+                    <div class="text-dark text-break">@Html.Raw(Model.HoursOfOperation)</div>
                 </div>
             }
 
