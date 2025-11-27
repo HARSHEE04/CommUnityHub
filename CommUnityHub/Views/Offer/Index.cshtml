@@ -42,7 +42,9 @@
                             <th>Title</th>
                             <th>Category</th>
                             <th>Location</th>
+                            <th>Contact</th>
                             <th>Status</th>
+                            <th></th>
 
                             @* FIX: Actions header visible ONLY to Admin *@
                             @if (User.IsInRole("Admin"))
@@ -58,6 +60,7 @@
                                 <td>@offer.Title</td>
                                 <td>@offer.Category</td>
                                 <td>@offer.Location</td>
+                                <td>@offer.ContactEmail</td>
                                 <td>@offer.Status</td>
 
                                 @* FIX: Edit/Delete buttons visible ONLY to Admin *@

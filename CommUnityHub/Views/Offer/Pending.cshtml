@@ -32,6 +32,7 @@
                             <th>Title</th>
                             <th>Category</th>
                             <th>Location</th>
+                            <th>Contact</th>
                             <th>Status</th>
                             <th style="width: 180px;"></th>
                         </tr>
@@ -43,6 +44,7 @@
                                 <td>@offer.Title</td>
                                 <td>@offer.Category</td>
                                 <td>@offer.Location</td>
+                                <td>@offer.ContactEmail</td>
                                 <td>@offer.Status</td>
                                 <td>
                                     <form asp-action="Approve" asp-route-id="@offer.OfferId" method="post" style="display:inline">
