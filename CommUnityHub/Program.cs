@@ -62,18 +62,18 @@ namespace CommUnityHub
             using (var scope = app.Services.CreateScope())
             {
                 var services = scope.ServiceProvider;
-
-                // Seed admin user
-                var userContext = services.GetRequiredService<UserIdentityDbContext>();
+                var context = services.GetRequiredService<UserIdentityDbContext>();
                 var userManager = services.GetRequiredService<UserManager<User>>();
-                DBInitializer.Initialize(userContext, userManager);
+                var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>(); 
+
+                DBInitializer.Initialize(context, userManager, roleManager).GetAwaiter().GetResult();
             }
 
 
             app.UseStaticFiles();
             app.UseRouting();
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
             app.MapControllerRoute(
                 name: "Default",
                 pattern: "{controller=Resources}/{action=loadDashboard}/{id?}"
