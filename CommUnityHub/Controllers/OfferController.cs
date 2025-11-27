@@ -31,7 +31,7 @@ namespace CommUnityHub.Controllers
         }
 
         // GET: /Offer/Create
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "Volunteer,Admin")]
         public IActionResult Create()
         {
             return View();
@@ -39,7 +39,7 @@ namespace CommUnityHub.Controllers
 
         // POST: /Offer/Create
         [HttpPost]
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "Volunteer,Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(Offer offer)
         {
@@ -54,8 +54,8 @@ namespace CommUnityHub.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Offer/Edit/5
-        [Authorize(Roles = "Volunteer")]
+        // GET ADMIN: /Offer/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -72,9 +72,9 @@ namespace CommUnityHub.Controllers
             return View(offer);
         }
 
-        // POST: /Offer/Edit/5
+        // POST ADMIN: /Offer/Edit/5
         [HttpPost]
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, Offer offer)
         {
@@ -108,8 +108,8 @@ namespace CommUnityHub.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        // GET: /Offer/Delete/5
-        [Authorize(Roles = "Volunteer")]
+        // GET ADMIN: /Offer/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -128,9 +128,9 @@ namespace CommUnityHub.Controllers
             return View(offer);
         }
 
-        // POST: /Offer/Delete/5
+        // POST ADMIN: /Offer/Delete/5
         [HttpPost, ActionName("Delete")]
-        [Authorize(Roles = "Volunteer")]
+        [Authorize(Roles = "Admin")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
