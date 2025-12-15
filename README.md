@@ -3,8 +3,9 @@
 A full-stack **ASP.NET Core MVC** web application that helps students across the **GTA** discover trusted, free community resources — all in one place.
 
 ---
-Click to watch the demo!:
-[![Watch the video](https://youtu.be/2uqWMQJ_Dug)
+### 🎥 Demo Video
+
+[![Watch the demo](https://img.youtube.com/vi/2uqWMQJ_Dug/0.jpg)](https://youtu.be/2uqWMQJ_Dug)
 
 ## 🔎 What Is CommUnity Hub?
 
